@@ -24,7 +24,7 @@ public class StarshipServiceImpl implements StarshipService{
     }
 
     @Override
-    @KafkaListener(id = "Starship", topics = {"server.starship"}, containerFactory = "singleFactory")
+    @KafkaListener(id = "starship", topics = {"server.starship"}, containerFactory = "singleFactory")
     public void consume(StarshipDto dto) {
         System.out.println("Incoming value: " + writeValueAsString(dto));
     }

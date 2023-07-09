@@ -20,13 +20,19 @@ public class StarshipServiceImpl implements StarshipService{
 
     @Override
     public void send(StarshipDto dto) {
-        kafkaStarshipTemplate.send("server.starship", dto);
+        kafkaStarshipTemplate.send("main", dto);
+        kafkaStarshipTemplate.send("logging", dto);
     }
 
     @Override
-    @KafkaListener(id = "starship", topics = {"server.starship"}, containerFactory = "singleFactory")
+    @KafkaListener(topics = {"main"}, containerFactory = "singleFactory")
     public void consume(StarshipDto dto) {
         System.out.println("Incoming value: " + writeValueAsString(dto));
+    }
+
+    @KafkaListener(topics = {"log.answer"}, containerFactory = "answerSingleFactory")
+    public void answer(String message) {
+        System.out.println("Get message from logs: " + message); // TODO Delete
     }
 
     private String writeValueAsString(StarshipDto dto) {

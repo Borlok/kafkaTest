@@ -46,6 +46,20 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
+    public KafkaListenerContainerFactory<?> answerSingleFactory() {
+        ConcurrentKafkaListenerContainerFactory<Long, String> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(answerFactory());
+        factory.setBatchListener(false);
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<? super Long, ? super String> answerFactory() {
+        return new DefaultKafkaConsumerFactory<>(consumerConfigs());
+    }
+
+    @Bean
     public ConsumerFactory<Long, AbstractDto> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(consumerConfigs());
     }
